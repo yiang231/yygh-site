@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import {Message} from 'element-ui'
 // 创建axios实例
 const service = axios.create({
     baseURL: 'http://localhost',
-    timeout: 15000 // 请求超时时间
+    timeout: 150000 // 请求超时时间
 })
 // http request 拦截器
 service.interceptors.request.use(
