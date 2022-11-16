@@ -12,7 +12,7 @@ export default {
   //根据id查询下级
   findByParentId(parentId) {
     return request({
-      url: `${api_name}/findChildData/${parentId}`,
+      url: `/admin/cmn/dict/findChildData/${parentId}`,
       method: 'get'
     })
   }

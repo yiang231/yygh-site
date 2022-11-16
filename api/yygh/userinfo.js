@@ -7,5 +7,18 @@ export default {
       method: 'post',
       data: loginVo
     })
+  },
+  getUserInfo() {
+    return request({
+      url: `/api/user/auth/getUserInfo`,
+      method: `get`
+    })
+  },
+  saveUserAuth(userAuth) {
+    return request({
+      url: `/api/user/auth/userAuth`,
+      method: 'post',
+      data: userAuth
+    })
   }
 }
