@@ -38,5 +38,12 @@ export default {
       url: `${api_path}/auth/findScheduleList/${hoscode}/${depcode}/${workDate}`,
       method: 'get'
     })
+  },
+  //根据排班id查询排班对象
+  getSchedule(id) {
+    return request({
+      url: `${api_path}/getSchedule/${id}`,
+      method: 'get'
+    })
   }
 }

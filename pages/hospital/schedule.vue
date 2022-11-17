@@ -7,10 +7,12 @@
         <span :onclick="'javascript:window.location=\'/hosp/'+hoscode+'\''" class="v-link selected dark">预约挂号 </span>
       </div>
       <div class="nav-item ">
-        <span :onclick="'javascript:window.location=\'/hosp/detail/'+hoscode+'\''" class="v-link clickable dark"> 医院详情 </span>
+        <span :onclick="'javascript:window.location=\'/hosp/detail/'+hoscode+'\''"
+              class="v-link clickable dark"> 医院详情 </span>
       </div>
       <div class="nav-item">
-        <span :onclick="'javascript:window.location=\'/hosp/notice/'+hoscode+'\''" class="v-link clickable dark"> 预约须知 </span>
+        <span :onclick="'javascript:window.location=\'/hosp/notice/'+hoscode+'\''"
+              class="v-link clickable dark"> 预约须知 </span>
       </div>
       <div class="nav-item "><span
         class="v-link clickable dark"> 停诊信息 </span>
@@ -24,7 +26,7 @@
     <div class="page-container">
       <div class="hospital-source-list">
         <div class="header-wrapper" style="justify-content:normal">
-          <span class="v-link clickable" @click="show()">{{ baseMap.hosname}}</span>
+          <span class="v-link clickable" @click="show()">{{ baseMap.hosname }}</span>
           <div class="split"></div>
           <div>{{ baseMap.bigname }}</div>
         </div>
@@ -38,10 +40,13 @@
             <div v-for="(item, index) in bookingScheduleList" :key="item.id"
                  :class="'calendar-item '+item.curClass" style="width: 124px;"
                  @click="selectDate(item, index)">
-              <div class="date-wrapper"><span>{{ item.workDate }}</span><span class="week">{{ item.dayOfWeek }}</span></div>
-              <div v-if="item.status == 0" class="status-wrapper">{{ item.availableNumber == -1 ? '无号' : item.availableNumber == 0 ? '约满' : '有号' }}</div>
-              <div v-if="item.status == 1" class="status-wrapper">即将放号</div>
-              <div v-if="item.status == -1" class="status-wrapper">停止挂号</div>
+              <div class="date-wrapper"><span>{{ item.workDate }}</span><span class="week">{{ item.dayOfWeek }}</span>
+              </div>
+              <div v-if="item.status === 0" class="status-wrapper">
+                {{ item.availableNumber === -1 ? '无号' : item.availableNumber === 0 ? '约满' : '有号' }}
+              </div>
+              <div v-if="item.status === 1" class="status-wrapper">即将放号</div>
+              <div v-if="item.status === -1" class="status-wrapper">停止挂号</div>
             </div>
           </div>
           <!-- 分页 -->
@@ -56,7 +61,8 @@
         </div>
         <!-- 即将放号 #start-->
         <div v-if="!tabShow" class="countdown-wrapper mt60">
-          <div class="countdonw-title"> {{ time }}<span class="v-link selected">{{ baseMap.releaseTime }} </span>放号</div>
+          <div class="countdonw-title"> {{ time }}<span class="v-link selected">{{ baseMap.releaseTime }} </span>放号
+          </div>
           <div class="countdown-text"> 倒 计 时
             <div>
               <span class="number">{{ timeString }}</span>
@@ -72,8 +78,8 @@
               <div class="block"></div>
               上午号源
             </div>
-            <div v-for="item in scheduleList" :key="item.id" >
-              <div v-if="item.workTime == 0" class="list-item">
+            <div v-for="item in scheduleList" :key="item.id">
+              <div v-if="item.workTime === 0" class="list-item">
                 <div class="item-wrapper">
                   <div class="title-wrapper">
                     <div class="title">{{ item.title }}</div>
@@ -86,7 +92,8 @@
                   <div class="fee"> ￥{{ item.amount }}
                   </div>
                   <div class="button-wrapper">
-                    <div :style="item.availableNumber == 0 || pageFirstStatus == -1 ? 'background-color: #7f828b;' : ''" class="v-button" @click="booking(item.id, item.availableNumber)">
+                    <div :style="item.availableNumber === 0 || pageFirstStatus === -1 ? 'background-color: #7f828b;' : ''"
+                         class="v-button" @click="booking(item.id, item.availableNumber)">
                       <span>剩余<span class="number">{{ item.availableNumber }}</span></span></div>
                   </div>
                 </div>
@@ -103,7 +110,7 @@
               下午号源
             </div>
             <div v-for="item in scheduleList" :key="item.id">
-              <div v-if="item.workTime == 1" class="list-item">
+              <div v-if="item.workTime === 1" class="list-item">
                 <div class="item-wrapper">
                   <div class="title-wrapper">
                     <div class="title">{{ item.title }}</div>
@@ -116,7 +123,8 @@
                   <div class="fee"> ￥{{ item.amount }}
                   </div>
                   <div class="button-wrapper">
-                    <div :style="item.availableNumber == 0 || pageFirstStatus == -1 ? 'background-color: #7f828b;' : ''" class="v-button" @click="booking(item.id, item.availableNumber)">
+                    <div :style="item.availableNumber === 0 || pageFirstStatus === -1 ? 'background-color: #7f828b;' : ''"
+                         class="v-button" @click="booking(item.id, item.availableNumber)">
                       <span>剩余<span class="number">{{ item.availableNumber }}</span></span></div>
                   </div>
                 </div>
@@ -144,8 +152,8 @@ export default {
       depcode: null,
       workDate: null,
       bookingScheduleList: [],
-      scheduleList : [],
-      baseMap : {},
+      scheduleList: [],
+      baseMap: {},
       nextWorkDate: null, // 下一页第一个日期
       preWorkDate: null, // 上一页第一个日期
       tabShow: true, //挂号列表与即将挂号切换
@@ -192,7 +200,7 @@ export default {
           this.workDate = this.bookingScheduleList[0].workDate
         }
         //判断当天是否停止预约 status == -1 停止预约
-        if(this.workDate == this.getCurDate()) {
+        if (this.workDate === this.getCurDate()) {
           this.pageFirstStatus = this.bookingScheduleList[0].status
         } else {
           this.pageFirstStatus = 0
@@ -212,10 +220,10 @@ export default {
       this.activeIndex = index
 
       //清理定时
-      if(this.timer != null) clearInterval(this.timer)
+      if (this.timer != null) clearInterval(this.timer)
 
       // 是否即将放号
-      if(item.status == 1) {
+      if (item.status === 1) {
         this.tabShow = false
         // 放号时间
         let releaseTime = new Date(this.getCurDate() + ' ' + this.baseMap.releaseTime).getTime()
@@ -234,8 +242,8 @@ export default {
       //处理样式
       for (let i = 0; i < this.bookingScheduleList.length; i++) {
         // depNumber -1:无号 0：约满 >0：有号
-        let curClass = this.bookingScheduleList[i].availableNumber == -1 ? 'gray space' : this.bookingScheduleList[i].availableNumber == 0 ? 'gray' : 'small small-space'
-        curClass += i == this.activeIndex ? ' selected' : ''
+        let curClass = this.bookingScheduleList[i].availableNumber === -1 ? 'gray space' : this.bookingScheduleList[i].availableNumber === 0 ? 'gray' : 'small small-space'
+        curClass += i === this.activeIndex ? ' selected' : ''
         this.bookingScheduleList[i].curClass = curClass
       }
     },
@@ -251,7 +259,7 @@ export default {
     countDown(releaseTime, nowTime) {
       //计算倒计时时长
       let secondes = 0;
-      if(releaseTime > nowTime) {
+      if (releaseTime > nowTime) {
         this.time = '今天'
         //当前时间到放号时间的时长
         secondes = Math.floor((releaseTime - nowTime) / 1000);
@@ -267,7 +275,7 @@ export default {
       //定时任务
       this.timer = setInterval(() => {
         secondes = secondes - 1
-        if(secondes <= 0) {
+        if (secondes <= 0) {
           clearInterval(timer);
           this.init()
         }
@@ -280,7 +288,7 @@ export default {
     },
 
     convertTimeString(allseconds) {
-      if(allseconds <= 0) return '00:00:00'
+      if (allseconds <= 0) return '00:00:00'
       // 计算天数
       let days = Math.floor(allseconds / (60 * 60 * 24));
       // 小时
@@ -303,7 +311,7 @@ export default {
     },
 
     booking(scheduleId, availableNumber) {
-      if(availableNumber == 0 || this.pageFirstStatus == -1) {
+      if (availableNumber === 0 || this.pageFirstStatus === -1) {
         this.$message.error('不能预约')
       } else {
         window.location.href = '/hospital/booking?scheduleId=' + scheduleId
