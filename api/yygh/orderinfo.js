@@ -31,5 +31,4 @@ export default {
       method: 'get'
     })
   },
-
 }
