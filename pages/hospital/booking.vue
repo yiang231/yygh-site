@@ -150,6 +150,7 @@
 </template>
 
 <script>
+import orderInfoApi from "@/api/yygh/orderinfo"
 import '~/assets/css/hospital_personal.css'
 import '~/assets/css/hospital.css'
 
@@ -165,7 +166,7 @@ export default {
         param: {}
       },
       patientList: [],
-      patient: {},
+      patient: {},//记录选中的就诊人
 
       activeIndex: 0,
       submitBnt: '确认挂号'
@@ -206,9 +207,29 @@ export default {
     },
 
     submitOrder() {
+      //点击确认挂号按钮被调用
+
+      //是否选择了就诊人
+      if (this.patient.id == null) {
+        this.$message.error('请选择就诊人')
+        return
+      }
+      //判断按钮是否已经被点击
+      if (this.submitBnt === '正在提交...') {
+        this.$message.error('请勿重复提交')
+        return
+      }
+      this.submitBnt === '正在提交...' //按钮被点击了一次之后，就不能再点击
+      orderInfoApi.submitOrder(this.scheduleId, this.patient.id).then(resp => {
+        //下一个页面，订单详情页面（根据订单id查询订单对象）
+        //order/show.vue 订单详情页面
+        window.location.href = '/order/show?orderId=' + resp.data.orderId
+      }).catch(resp => {
+        this.$message.error('订单提交失败')
+        this.submitBnt = '确认挂号' //按钮可以继续点击
+      })
 
     },
-
     addPatient() {
       window.location.href = '/patient/add'
     }
