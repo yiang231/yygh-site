@@ -15,5 +15,11 @@ export default {
       url: `/api/payment/weixin/createNative/${orderId}`,
       method: 'get'
     })
+  },
+  queryPayStatus(orderId) {
+    return request({
+      url: `/api/payment/weixin/queryPayStatus/${orderId}`,
+      method: 'get'
+    })
   }
 }

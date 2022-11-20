@@ -150,6 +150,7 @@ export default {
         this.orderInfo = response.data.orderInfo
       })
     },
+    //点击支付按钮
     pay() {
       this.dialogPayVisible = true//显示支付弹出框
       weixinApi.createNative(this.orderId).then(resp => {
@@ -157,9 +158,33 @@ export default {
         if (this.payObj.codeUrl === '') {
           //没有获取到支付链接
           this.dialogPayVisible = false
-          this.$message.error("支付错误");
+          this.$message.error("支付错误（二维码显示失败）");
+        } else {
+          //支付二维码正常显示
+          //调用后端查询支付状态接口（定时器，每隔3秒）
+          //定时器方法，每隔3秒去查询一次支付状态
+          this.timer = setInterval(() => {
+            this.queryPayStatus(this.orderId)
+          }, 3000);
         }
       })
+    },
+    queryPayStatus(orderId) {
+      weixinApi.queryPayStatus(orderId).then(response => {
+        if (response.message === '支付中') {
+          return //没有关闭定时器
+        } else {
+          //支付成功/支付出错，定时器关闭，当前页面重新加载（订单详情）
+          clearInterval(this.timer);
+          window.location.reload()
+        }
+      })
+    },
+    // 关闭定时器关闭支付页面
+    closeDialog() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
     }
   }
 }
