@@ -21,5 +21,11 @@ export default {
       url: `/api/payment/weixin/queryPayStatus/${orderId}`,
       method: 'get'
     })
+  },
+  cancelOrder(orderId) {
+    return request({
+      url: `/api/order/orderInfo/auth/cancelOrder/${orderId}`,
+      method: 'get'
+    })
   }
 }

@@ -165,7 +165,7 @@ export default {
           //定时器方法，每隔3秒去查询一次支付状态
           this.timer = setInterval(() => {
             this.queryPayStatus(this.orderId)
-          }, 3000);
+          }, 2000);
         }
       })
     },
@@ -185,6 +185,29 @@ export default {
       if (this.timer) {
         clearInterval(this.timer);
       }
+    },
+    cancelOrder() {
+      this.$confirm('此操作将取消订单预约, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        weixinApi.cancelOrder(this.orderId).then(resp => {
+          if (resp.data.flag === true) {
+            //取消成功
+            this.$message({
+              type: 'success',
+              message: '取消成功!'
+            });
+            this.init()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   }
 }
